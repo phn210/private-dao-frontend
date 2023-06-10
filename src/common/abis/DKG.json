@@ -1,0 +1,938 @@
+[
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "round2Verfier",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "fundingVerifier",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "votingVerifier",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "tallyContributionVerifier",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "resultVerifier",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct IDKG.DKGConfig",
+        "name": "_dkgConfig",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "distributedKeyID",
+        "type": "uint256"
+      }
+    ],
+    "name": "DistributedKeyActivated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "distributedKeyID",
+        "type": "uint256"
+      }
+    ],
+    "name": "DistributedKeyGenerated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "submitter",
+        "type": "address"
+      }
+    ],
+    "name": "Round1DataSubmitted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "submitter",
+        "type": "address"
+      }
+    ],
+    "name": "Round2DataSubmitted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "submitter",
+        "type": "address"
+      }
+    ],
+    "name": "TallyContributionSubmitted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "submitter",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "requestID",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256[]",
+        "name": "result",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "TallyResultSubmitted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "requestID",
+        "type": "bytes32"
+      }
+    ],
+    "name": "TallyStarted",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "distributedKeyCounter",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "distributedKeys",
+    "outputs": [
+      {
+        "internalType": "enum IDKG.DistributedKeyType",
+        "name": "keyType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "dimension",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "round1Counter",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "round2Counter",
+        "type": "uint8"
+      },
+      {
+        "internalType": "address",
+        "name": "verifier",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "publicKeyX",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "publicKeyY",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "usageCounter",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "fundingVerifiers",
+    "outputs": [
+      {
+        "internalType": "contract IVerifier",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "_dimension",
+        "type": "uint8"
+      },
+      {
+        "internalType": "enum IDKG.DistributedKeyType",
+        "name": "_distributedKeyType",
+        "type": "uint8"
+      }
+    ],
+    "name": "generateDistributedKey",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "distributedKeyID",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_committeeAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_distributedKeyID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCommitteeIndex",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributedKeyID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getDimension",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributedKeyID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getDistributedKeyState",
+    "outputs": [
+      {
+        "internalType": "enum IDKG.DistributedKeyState",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_requestID",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getM",
+    "outputs": [
+      {
+        "internalType": "uint256[][]",
+        "name": "",
+        "type": "uint256[][]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributedKeyID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPublicKey",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_requestID",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getR",
+    "outputs": [
+      {
+        "internalType": "uint256[][]",
+        "name": "",
+        "type": "uint256[][]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributedKeyID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getRound1DataSubmissions",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "sender",
+            "type": "address"
+          },
+          {
+            "internalType": "uint8",
+            "name": "senderIndex",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "x",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "y",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct IDKG.Round1DataSubmission[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributedKeyID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "_recipientIndex",
+        "type": "uint8"
+      }
+    ],
+    "name": "getRound2DataSubmissions",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "senderIndex",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "ciphers",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct IDKG.Round2DataSubmission[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_requestID",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getTallyDataSubmissions",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "senderIndex",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256[][]",
+            "name": "Di",
+            "type": "uint256[][]"
+          }
+        ],
+        "internalType": "struct IDKG.TallyDataSubmission[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_requestID",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getTallyTracker",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "distributedKeyID",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[][]",
+            "name": "R",
+            "type": "uint256[][]"
+          },
+          {
+            "internalType": "uint256[][]",
+            "name": "M",
+            "type": "uint256[][]"
+          },
+          {
+            "internalType": "enum IDKG.TallyTrackerState",
+            "name": "state",
+            "type": "uint8"
+          },
+          {
+            "components": [
+              {
+                "internalType": "uint8",
+                "name": "senderIndex",
+                "type": "uint8"
+              },
+              {
+                "internalType": "uint256[][]",
+                "name": "Di",
+                "type": "uint256[][]"
+              }
+            ],
+            "internalType": "struct IDKG.TallyDataSubmission[]",
+            "name": "tallyDataSubmissions",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint8",
+            "name": "tallyCounter",
+            "type": "uint8"
+          },
+          {
+            "internalType": "bool",
+            "name": "resultSubmitted",
+            "type": "bool"
+          },
+          {
+            "internalType": "address",
+            "name": "dao",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "contributionVerifier",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "resultVerifier",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct IDKG.TallyTracker",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_requestID",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getTallyTrackerState",
+    "outputs": [
+      {
+        "internalType": "enum IDKG.TallyTrackerState",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributedKeyID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getType",
+    "outputs": [
+      {
+        "internalType": "enum IDKG.DistributedKeyType",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributedKeyID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getUsageCounter",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributedKeyID",
+        "type": "uint256"
+      }
+    ],
+    "name": "getVerifier",
+    "outputs": [
+      {
+        "internalType": "contract IVerifier",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "resultVerifiers",
+    "outputs": [
+      {
+        "internalType": "contract IVerifier",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "round2Verifier",
+    "outputs": [
+      {
+        "internalType": "contract IVerifier",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_requestID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_distributedKeyID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[][]",
+        "name": "_R",
+        "type": "uint256[][]"
+      },
+      {
+        "internalType": "uint256[][]",
+        "name": "_M",
+        "type": "uint256[][]"
+      }
+    ],
+    "name": "startTallying",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributedKeyID",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256[]",
+            "name": "x",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "y",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct IDKG.Round1Contribution",
+        "name": "_round1Contribution",
+        "type": "tuple"
+      }
+    ],
+    "name": "submitRound1Contribution",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_distributedKeyID",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "senderIndex",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8[]",
+            "name": "recipientIndexes",
+            "type": "uint8[]"
+          },
+          {
+            "internalType": "uint256[][]",
+            "name": "ciphers",
+            "type": "uint256[][]"
+          },
+          {
+            "internalType": "bytes",
+            "name": "proof",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct IDKG.Round2Contribution",
+        "name": "_round2Contribution",
+        "type": "tuple"
+      }
+    ],
+    "name": "submitRound2Contribution",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_requestID",
+        "type": "bytes32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "senderIndex",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256[][]",
+            "name": "Di",
+            "type": "uint256[][]"
+          },
+          {
+            "internalType": "bytes",
+            "name": "proof",
+            "type": "bytes"
+          }
+        ],
+        "internalType": "struct IDKG.TallyContribution",
+        "name": "_tallyContribution",
+        "type": "tuple"
+      }
+    ],
+    "name": "submitTallyContribution",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_requestID",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_result",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_proof",
+        "type": "bytes"
+      }
+    ],
+    "name": "submitTallyResult",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "tallyContributionVerifiers",
+    "outputs": [
+      {
+        "internalType": "contract IVerifier",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "tallyTrackers",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "distributedKeyID",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum IDKG.TallyTrackerState",
+        "name": "state",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "tallyCounter",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bool",
+        "name": "resultSubmitted",
+        "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "dao",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "contributionVerifier",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "resultVerifier",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "votingVerifiers",
+    "outputs": [
+      {
+        "internalType": "contract IVerifier",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
